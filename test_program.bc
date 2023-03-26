@@ -1,0 +1,4 @@
+extern EXTERN_a;
+extern EXTERN_b;
+
+let c = EXTERN_a * EXTERN_b;
