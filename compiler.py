@@ -221,7 +221,7 @@ class Barracuda:
         self.values = numpy.ctypeslib.as_array(compiled_output.values_list.ptr,
                                                shape=(compiled_output.values_list.cap,))  # .astype(numpy.float64)
 
-        self.instructions = numpy.concatenate(([0], self.instructions))
+        self.instructions = numpy.concatenate(([0], self.instructions)).astype(numpy.int32)
         self.values = numpy.concatenate(([0], self.values))
         self.operations = numpy.concatenate(([0], self.operations))
 
