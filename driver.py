@@ -51,4 +51,4 @@ def compile_and_run(program, precision: int = 1, threads: int = 128, blocks: int
         solve_func(instr_stack, op_stack, value_stack, sizes[0], sizes[3], user_space, sizes[4], blocks, threads,
                    result)
 
-    return result
+    return result, bc

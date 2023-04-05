@@ -4,7 +4,7 @@ import sys
 import os
 import threading
 
-_c_float_p = ctypes.POINTER(ctypes.c_float)
+_c_float_p = ctypes.POINTER(ctypes.c_double)
 _c_uint32_p = ctypes.POINTER(ctypes.c_uint32)
 _c_uint64_p = ctypes.POINTER(ctypes.c_uint64)
 
@@ -219,7 +219,11 @@ class Barracuda:
                                                    shape=(compiled_output.operations_list.cap,)).astype(numpy.int64)
 
         self.values = numpy.ctypeslib.as_array(compiled_output.values_list.ptr,
-                                               shape=(compiled_output.values_list.cap,)).astype(numpy.float64)
+                                               shape=(compiled_output.values_list.cap,))  # .astype(numpy.float64)
+
+        self.instructions = numpy.concatenate(([0], self.instructions))
+        self.values = numpy.concatenate(([0], self.values))
+        self.operations = numpy.concatenate(([0], self.operations))
 
         stack_size = int(compiled_output.recommended_stack_size)
 
