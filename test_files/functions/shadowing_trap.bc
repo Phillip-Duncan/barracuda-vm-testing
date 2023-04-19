@@ -1,0 +1,9 @@
+fn testfunc(a) {
+    return 3 + a;
+} 
+fn testfunc2() {
+    fn testfunc(a) {
+        return a - 1000;
+    }
+} 
+testfunc(3) + 2;

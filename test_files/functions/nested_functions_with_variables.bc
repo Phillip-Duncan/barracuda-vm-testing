@@ -1,0 +1,13 @@
+fn test4(a, b) {
+    return a - b;
+}
+fn test3(a, b) {
+    return test4(a + 15, b - 15);
+}
+fn test2(a, b) {
+    return test3(a + 10, b - 10);
+}  
+fn test1(a, b) {
+    return test2(a + 5, b - 5);
+}  
+1 + test1(0, 20);

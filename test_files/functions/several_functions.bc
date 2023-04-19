@@ -1,0 +1,13 @@
+fn test1() {
+    return 2;
+} 
+fn test2() {
+    return 3;
+} 
+fn test3() {
+    return 4;
+} 
+fn test4() {
+    return 5;
+} 
+1 + test1() + test2() + test3() + test4();

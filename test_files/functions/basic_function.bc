@@ -1,0 +1,4 @@
+fn testfunc() {
+    return 3;
+} 
+testfunc() + 5;

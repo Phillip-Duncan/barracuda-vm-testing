@@ -30,7 +30,7 @@ def compress(array):
     ("power_fractional", 1.97159185937), # 3.1 ^ 0.6
     ("power_nan", math.nan), # -1 ^ 0.5
 ])
-def test_operation(program, answer):
+def test_operations(program, answer):
     program_string = f"test_files/math_operations/{program}.bc"
     stack = compile_and_run(program_string)[0]
     print(compress(stack))
@@ -40,3 +40,54 @@ def test_operation(program, answer):
         assert numpy.any(numpy.isinf(stack))
     else:
         assert numpy.any(abs(stack - answer) <= abs(answer) / 1000000) # Uses absolute value with offset to deal with floating point error
+
+@pytest.mark.parametrize("program, answer", [
+    ("basic_function", 8),
+    ("variable_function", 13),
+    ("two_variable_function", 8),
+    ("many_variable_function", 350),
+    ("several_functions", 15),
+    ("nested_functions", 15),
+    ("nested_functions_with_variables", 41),
+    # ("recursive_function", 350), # Gets stuck in infinite loop
+    ("shadowing", 11),
+    # ("scope_shadowing", 25), # Shadowing doesn't respect scope, giving 14.
+    # ("self_shadowing", 34), # Self shadowing also doesn't work
+    # ("shadowing_trap", 8), # Shadowing doesn't respect scope (again).
+])
+def test_functions(program, answer):
+    program_string = f"test_files/functions/{program}.bc"
+    stack = compile_and_run(program_string)[0]
+    print(compress(stack))
+    if math.isnan(answer):
+        assert numpy.any(numpy.isnan(stack))
+    elif answer == math.inf:
+        assert numpy.any(numpy.isinf(stack))
+    else:
+        assert numpy.any(abs(stack - answer) <= abs(answer) / 1000000) # Uses absolute value with offset to deal with floating point error
+
+
+def functions():
+    test_cases = [
+    ("basic_function", 8),
+    ("variable_function", 13),
+    ("two_variable_function", 8),
+    ("many_variable_function", 350),
+    ("several_functions", 15),
+    ("nested_functions", 15),
+    ("nested_functions_with_variables", 41),
+    # ("recursive_function", 350), # Gets stuck in infinite loop
+    ("shadowing", 11),
+    # ("scope_shadowing", 25), # Shadowing doesn't respect scope, giving 14.
+    # ("self_shadowing", 34), # Self shadowing also doesn't work
+    # ("shadowing_trap", 8), # Shadowing doesn't respect scope (again).
+    ]
+    for program, answer in test_cases:
+        program_string = f"test_files/functions/{program}.bc"
+        stack = compile_and_run(program_string, threads=1, blocks=1)[0]
+        if not numpy.any(abs(stack - answer) <= abs(answer) / 1000000):  # Uses absolute value with offset to deal with floating point error
+            print(f"{program} failed! Stack:")
+            print(compress(stack))
+
+if __name__ == "__main__":
+    functions()

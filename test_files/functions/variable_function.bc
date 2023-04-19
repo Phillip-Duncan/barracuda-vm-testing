@@ -1,0 +1,4 @@
+fn testfunc(a) {
+    return 3 + a;
+} 
+testfunc(8) + 2;
