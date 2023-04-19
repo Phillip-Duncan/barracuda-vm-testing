@@ -49,15 +49,18 @@ def test_operations(program, answer):
     ("several_functions", 15),
     ("nested_functions", 15),
     ("nested_functions_with_variables", 41),
-    # ("recursive_function", 350), # Gets stuck in infinite loop
-    ("shadowing", 11),
-    # ("scope_shadowing", 25), # Shadowing doesn't respect scope, giving 14.
-    # ("self_shadowing", 34), # Self shadowing also doesn't work
-    # ("shadowing_trap", 8), # Shadowing doesn't respect scope (again).
+    ("self_shadowing", 34), # Rare case of shadowing not producing compiler error.
+    # This is because functions are not added to scope until the function definition has finished.
+
+    # The following four tests should work once/if recursion and function shadowing are implemented.
+    ## ("recursive_function", 350), # Gets stuck in infinite loop
+    ## ("shadowing", 11),
+    ## ("scope_shadowing", 25), # Shadowing doesn't respect scope, giving 14.
+    ## ("shadowing_trap", 8), # Shadowing doesn't respect scope (again).
 ])
 def test_functions(program, answer):
     program_string = f"test_files/functions/{program}.bc"
-    stack = compile_and_run(program_string)[0]
+    stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
     if math.isnan(answer):
         assert numpy.any(numpy.isnan(stack))
@@ -76,11 +79,14 @@ def functions():
     ("several_functions", 15),
     ("nested_functions", 15),
     ("nested_functions_with_variables", 41),
-    # ("recursive_function", 350), # Gets stuck in infinite loop
-    ("shadowing", 11),
-    # ("scope_shadowing", 25), # Shadowing doesn't respect scope, giving 14.
-    # ("self_shadowing", 34), # Self shadowing also doesn't work
-    # ("shadowing_trap", 8), # Shadowing doesn't respect scope (again).
+    ("self_shadowing", 34), # Rare case of shadowing not producing compiler error.
+    # This is because functions are not added to scope until the function definition has finished.
+
+    # The following four tests should work once/if recursion and function shadowing are implemented.
+    ## ("recursive_function", 350), # Gets stuck in infinite loop
+    ## ("shadowing", 11),
+    ## ("scope_shadowing", 25), # Shadowing doesn't respect scope, giving 14.
+    ## ("shadowing_trap", 8), # Shadowing doesn't respect scope (again).
     ]
     for program, answer in test_cases:
         program_string = f"test_files/functions/{program}.bc"
