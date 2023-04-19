@@ -68,32 +68,3 @@ def test_functions(program, answer):
         assert numpy.any(numpy.isinf(stack))
     else:
         assert numpy.any(abs(stack - answer) <= abs(answer) / 1000000) # Uses absolute value with offset to deal with floating point error
-
-
-def functions():
-    test_cases = [
-    ("basic_function", 8),
-    ("variable_function", 13),
-    ("two_variable_function", 8),
-    ("many_variable_function", 350),
-    ("several_functions", 15),
-    ("nested_functions", 15),
-    ("nested_functions_with_variables", 41),
-    ("self_shadowing", 34), # Rare case of shadowing not producing compiler error.
-    # This is because functions are not added to scope until the function definition has finished.
-
-    # The following four tests should work once/if recursion and function shadowing are implemented.
-    ## ("recursive_function", 350), # Gets stuck in infinite loop
-    ## ("shadowing", 11),
-    ## ("scope_shadowing", 25), # Shadowing doesn't respect scope, giving 14.
-    ## ("shadowing_trap", 8), # Shadowing doesn't respect scope (again).
-    ]
-    for program, answer in test_cases:
-        program_string = f"test_files/functions/{program}.bc"
-        stack = compile_and_run(program_string, threads=1, blocks=1)[0]
-        if not numpy.any(abs(stack - answer) <= abs(answer) / 1000000):  # Uses absolute value with offset to deal with floating point error
-            print(f"{program} failed! Stack:")
-            print(compress(stack))
-
-if __name__ == "__main__":
-    functions()
