@@ -14,7 +14,16 @@ def compress(array):
             result[-1][1] += 1
     return [tuple(r) for r in result]
 
-# Paramtererized tests for mathematical operations
+def run_and_test_program(program_string, answer):
+    stack = compile_and_run(program_string)[0]
+    print(compress(stack))
+    if math.isnan(answer):
+        assert numpy.any(numpy.isnan(stack))
+    elif answer == math.inf:
+        assert numpy.any(numpy.isinf(stack))
+    else:
+        assert numpy.any(abs(stack - answer) <= abs(answer) / 1000000) # Uses absolute value with offset to deal with floating point error
+
 @pytest.mark.parametrize("program, answer", [
     ("addition", 10), # 3 + 7
     ("negative_addition", -9), # -4 + -5
@@ -30,16 +39,8 @@ def compress(array):
     ("power_fractional", 1.97159185937), # 3.1 ^ 0.6
     ("power_nan", math.nan), # -1 ^ 0.5
 ])
-def test_operations(program, answer):
-    program_string = f"test_files/math_operations/{program}.bc"
-    stack = compile_and_run(program_string)[0]
-    print(compress(stack))
-    if math.isnan(answer):
-        assert numpy.any(numpy.isnan(stack))
-    elif answer == math.inf:
-        assert numpy.any(numpy.isinf(stack))
-    else:
-        assert numpy.any(abs(stack - answer) <= abs(answer) / 1000000) # Uses absolute value with offset to deal with floating point error
+def test_math_operations(program, answer):
+    run_and_test_program(f"test_files/math_operations/{program}.bc", answer)
 
 @pytest.mark.parametrize("program, answer", [
     ("basic_function", 8),
@@ -59,12 +60,30 @@ def test_operations(program, answer):
     ## ("shadowing_trap", 8), # Shadowing doesn't respect scope (again).
 ])
 def test_functions(program, answer):
-    program_string = f"test_files/functions/{program}.bc"
+    run_and_test_program(f"test_files/functions/{program}.bc", answer)
+
+@pytest.mark.parametrize("program, answer", [
+    ("basic_construct", 49),
+    ("datatype_construct", 49),
+    ("datatype_qualifier_construct", 49),
+    ("datatype_qualifier_construct_2", 49),
+    ("construct_with_reassign", 49),
+    ("construct_with_self_assign", 81),
+    ("construct_with_many_assigns", 49),
+    ("tangled_construct", -18),
+    ("shadowed_construct", 81),
+    ("long_variable",  49)
+])
+def test_variables(program, answer):
+    run_and_test_program(f"test_files/variables/{program}.bc", answer)
+
+
+# For running individual tests without pytest and with more control
+def debug():
+    program_string = f"test_files/functions/variable_function.bc"
     stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
-    if math.isnan(answer):
-        assert numpy.any(numpy.isnan(stack))
-    elif answer == math.inf:
-        assert numpy.any(numpy.isinf(stack))
-    else:
-        assert numpy.any(abs(stack - answer) <= abs(answer) / 1000000) # Uses absolute value with offset to deal with floating point error
+    assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)
+
+if __name__ == "__main__":
+    debug()
