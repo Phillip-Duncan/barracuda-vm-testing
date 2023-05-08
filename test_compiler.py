@@ -77,10 +77,25 @@ def test_functions(program, answer):
 def test_variables(program, answer):
     run_and_test_program(f"test_files/variables/{program}.bc", answer)
 
+@pytest.mark.parametrize("program, answer", [
+    ("basic_if", 9),
+    ("basic_if_false", 5),
+    ("if_five", 9),
+    ("basic_else", 5),
+    ("basic_else_false", 9),
+    ("else_if_true", 9),
+    ("else_if_false", 5),
+    ("else_if_shortcircuit", 5),
+    ("else_if_long", 9),
+    ("nested_if", 9),
+])
+def test_if_and_else(program, answer):
+    run_and_test_program(f"test_files/if_and_else/{program}.bc", answer)
+
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/functions/variable_function.bc"
+    program_string = f"test_files/if_and_else/basic_if.bc"
     stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)

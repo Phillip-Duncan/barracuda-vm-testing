@@ -1,0 +1,5 @@
+let a = 3;
+if 5 { // checking if '5' is true
+    a = a + 4;
+} 
+a + 2;

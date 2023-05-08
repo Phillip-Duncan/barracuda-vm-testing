@@ -1,0 +1,7 @@
+let a = 3;
+if true {
+    
+} else {
+    a = a + 4;
+}
+a + 2;
