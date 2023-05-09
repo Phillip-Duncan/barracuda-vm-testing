@@ -93,10 +93,22 @@ def test_variables(program, answer):
 def test_if_and_else(program, answer):
     run_and_test_program(f"test_files/if_and_else/{program}.bc", answer)
 
+@pytest.mark.parametrize("program, answer", [
+    ("basic_while", 11),
+    ("skipped_while", 11),
+    ("nested_while", 32),
+    ("basic_for", 1025),
+    ("for_as_while", 1025),
+    ("skipped_for", 3),
+    ("nested_for", 100),
+])
+def test_for_and_while(program, answer):
+    run_and_test_program(f"test_files/for_and_while/{program}.bc", answer)
+
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/variables/construct_in_scope.bc"
+    program_string = f"test_files/for_and_while/nested_while.bc"
     stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)
