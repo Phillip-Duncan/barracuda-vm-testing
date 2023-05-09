@@ -72,7 +72,8 @@ def test_functions(program, answer):
     ("construct_with_many_assigns", 49),
     ("tangled_construct", -18),
     ("shadowed_construct", 81),
-    ("long_variable",  49)
+    ("long_variable",  49),
+    ("construct_in_scope",  16)
 ])
 def test_variables(program, answer):
     run_and_test_program(f"test_files/variables/{program}.bc", answer)
@@ -95,7 +96,7 @@ def test_if_and_else(program, answer):
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/if_and_else/basic_if.bc"
+    program_string = f"test_files/variables/construct_in_scope.bc"
     stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)
