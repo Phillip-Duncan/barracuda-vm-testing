@@ -105,10 +105,17 @@ def test_if_and_else(program, answer):
 def test_for_and_while(program, answer):
     run_and_test_program(f"test_files/for_and_while/{program}.bc", answer)
 
+@pytest.mark.parametrize("program, answer", [
+    ("external", math.pi / 2 + 1), # pi/2 plus 1
+    ("two_externals", (1 + 5 ** 0.5) / 2 * math.pi / 2), # golden ratio * pi/2
+    ("external_assign", 5),
+])
+def test_for_and_while(program, answer):
+    run_and_test_program(f"test_files/externals/{program}.bc", answer)
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/for_and_while/nested_while.bc"
+    program_string = f"test_files/two_externals/external.bc"
     stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)

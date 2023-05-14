@@ -1,0 +1,3 @@
+extern EXTERN_a;
+extern EXTERN_b;
+EXTERN_a * EXTERN_b;
