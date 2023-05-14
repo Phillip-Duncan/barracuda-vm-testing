@@ -1,0 +1,6 @@
+fn testfunc(a, b) {
+    b = b + 1;
+    a = a + 1;
+    return a + b;
+} 
+testfunc(1, 2) + 5;

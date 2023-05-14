@@ -45,7 +45,9 @@ def test_math_operations(program, answer):
 @pytest.mark.parametrize("program, answer", [
     ("basic_function", 8),
     ("variable_function", 13),
+    ("function_with_assign", 14),
     ("two_variable_function", 8),
+    ("two_variable_function_with_assign", 10),
     ("many_variable_function", 350),
     ("several_functions", 15),
     ("nested_functions", 15),
