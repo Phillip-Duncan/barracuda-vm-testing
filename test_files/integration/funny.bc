@@ -1,5 +1,0 @@
-let count = 0;
-for (let i = 2; i < 300; i = i + 1) {
-    count = count + 1;
-    count;
-}
