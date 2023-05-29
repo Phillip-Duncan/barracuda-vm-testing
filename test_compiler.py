@@ -117,13 +117,14 @@ def test_externals(program, answer):
 @pytest.mark.parametrize("program, answer", [
     ("prime_count", 25), # count of primes up to 100
     ("prime_count_functional", 25), # count of primes up to 100
+    ("pentagonal_numbers", 92), # see test file
 ])
 def test_integration(program, answer):
     run_and_test_program(f"test_files/integration/{program}.bc", answer)
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/integration/prime_count.bc"
+    program_string = f"test_files/integration/pentagonal_numbers.bc"
     stack = compile_and_run(program_string)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)

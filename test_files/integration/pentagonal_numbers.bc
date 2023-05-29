@@ -1,0 +1,36 @@
+
+fn pentagon(n) {
+    return n  * (3*n - 1) / 2;
+}
+
+fn is_pentagon(n) {
+    let p = 1;
+    while pentagon(p) <= n {
+        if pentagon(p) == n {
+            return true;
+        }
+        p = p + 1;
+    }
+    return false;
+}
+
+/*
+    Finds the smallest pentagon number pair 
+    where the two pentagon numbers 
+    add to a third pentagon number
+*/
+fn find_pentagons() {
+    let pentagon_i = 0;
+    let pentagon_j = 0;
+    for (let i = 1; i < 10; i = i + 1) {
+        pentagon_i = pentagon(i);
+        for (let j = 1; j < i; j = j + 1) {
+            pentagon_j = pentagon(j);
+            if is_pentagon(pentagon_j + pentagon_i) {
+                return pentagon_j + pentagon_i;
+            }
+        }
+    }
+}
+
+let test = find_pentagons(); 
