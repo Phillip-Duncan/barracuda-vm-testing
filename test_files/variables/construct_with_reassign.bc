@@ -1,3 +1,3 @@
 let a = 3;
 a = 7;
-a * a;
+let test = a * a;

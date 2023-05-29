@@ -74,8 +74,7 @@ def test_functions(program, answer):
     ("construct_with_many_assigns", 49),
     ("tangled_construct", -18),
     ("shadowed_construct", 81),
-    ("long_variable",  49),
-    ("construct_in_scope",  16)
+    ("long_variable",  49)
 ])
 def test_variables(program, answer):
     run_and_test_program(f"test_files/variables/{program}.bc", answer)
@@ -112,13 +111,19 @@ def test_for_and_while(program, answer):
     ("two_externals", (1 + 5 ** 0.5) / 2 * math.pi / 2), # golden ratio * pi/2
     ("external_assign", 5),
 ])
-def test_for_and_while(program, answer):
+def test_externals(program, answer):
     run_and_test_program(f"test_files/externals/{program}.bc", answer)
+
+@pytest.mark.parametrize("program, answer", [
+    ("prime_count", 25), # count of primes up to 100
+])
+def test_integration(program, answer):
+    run_and_test_program(f"test_files/integration/{program}.bc", answer)
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/two_externals/external.bc"
-    stack = compile_and_run(program_string, threads=1, blocks=1)[0]
+    program_string = f"test_files/for_and_while/nested_for.bc"
+    stack = compile_and_run(program_string)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)
 

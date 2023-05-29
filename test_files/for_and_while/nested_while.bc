@@ -5,4 +5,4 @@ while a > 5 {
         a = a - 5;
     }
 }
-a + 30;
+let test = a + 30;

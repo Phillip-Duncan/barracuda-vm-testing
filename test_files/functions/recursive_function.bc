@@ -5,4 +5,4 @@ fn testfunc(a) {
         return a + testfunc(a - 1);
     }
 } 
-testfunc(26) - 1;
+let test = testfunc(26) - 1;

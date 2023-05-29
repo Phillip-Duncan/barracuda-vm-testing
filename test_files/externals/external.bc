@@ -1,2 +1,2 @@
 extern EXTERN_a;
-EXTERN_a + 1;
+let test = EXTERN_a + 1;

@@ -6,4 +6,4 @@ fn testfunc2() {
         return a - 1000;
     }
 } 
-testfunc(3) + 2;
+let test = testfunc(3) + 2;

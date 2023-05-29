@@ -1,4 +1,4 @@
 fn testfunc() {
     return 3;
 } 
-testfunc() + 5;
+let test = testfunc() + 5;

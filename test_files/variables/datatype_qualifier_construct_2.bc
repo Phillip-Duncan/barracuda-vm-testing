@@ -1,2 +1,2 @@
 let a&: int = 7;
-a * a;
+let test = a * a;

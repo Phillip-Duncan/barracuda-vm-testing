@@ -1,0 +1,13 @@
+let count = 0;
+let prime = true;
+for (let i = 2; i < 100; i = i + 1) {
+    prime = true;
+    for (let j = 2; j < i; j = j + 1) {
+        if i % j == 0 {
+            prime = false;
+        }
+    }
+    if prime {
+        count = count + 1;
+    }
+}

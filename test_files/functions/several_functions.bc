@@ -10,4 +10,4 @@ fn test3() {
 fn test4() {
     return 5;
 } 
-1 + test1() + test2() + test3() + test4();
+let test = 1 + test1() + test2() + test3() + test4();

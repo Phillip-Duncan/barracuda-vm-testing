@@ -2,4 +2,4 @@ fn testfunc(a) {
     a = a + 1;
     return 3 + a;
 } 
-testfunc(8) + 2;
+let test = testfunc(8) + 2;

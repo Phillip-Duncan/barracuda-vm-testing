@@ -9,4 +9,4 @@ c = -1;
 b = a * c;
 a = 9;
 c = 2;
-a * b * c;
+let test = a * b * c;

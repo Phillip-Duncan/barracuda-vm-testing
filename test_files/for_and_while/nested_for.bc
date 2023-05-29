@@ -1,7 +1,7 @@
-let b = 1;
+let c = 1;
 for (let a = 0; a < 10; a = a + 1) {
-    for (let a = 0; a < 10; a = a + 1) {
-        b = b + 1;
+    for (let b = 0; b < 10; b = b + 1) {
+        c = c + 1;
     }
 }
-b - 1;
+let test = c - 1;

@@ -32,4 +32,4 @@ if false {
 } else {
     a = a + 4;
 }
-a + 2;
+let test = a + 2;

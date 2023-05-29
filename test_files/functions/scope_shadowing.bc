@@ -8,4 +8,4 @@ fn testfunc(a) {
     } 
     return 3 + testfunc2(a);
 } 
-testfunc(8) + testfunc2(1);
+let test = testfunc(8) + testfunc2(1);

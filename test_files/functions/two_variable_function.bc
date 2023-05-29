@@ -1,4 +1,4 @@
 fn testfunc(a, b) {
     return a + b;
 } 
-testfunc(1, 2) + 5;
+let test = testfunc(1, 2) + 5;
