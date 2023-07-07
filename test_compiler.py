@@ -66,9 +66,6 @@ def test_functions(program, answer):
 
 @pytest.mark.parametrize("program, answer", [
     ("basic_construct", 49),
-    ("datatype_construct", 49),
-    ("datatype_qualifier_construct", 49),
-    ("datatype_qualifier_construct_2", 49),
     ("construct_with_reassign", 49),
     ("construct_with_self_assign", 81),
     ("construct_with_many_assigns", 49),
@@ -115,6 +112,17 @@ def test_externals(program, answer):
     run_and_test_program(f"test_files/externals/{program}.bc", answer)
 
 @pytest.mark.parametrize("program, answer", [
+    ("basic_pointer", 7),
+    ("double_pointer", 7),
+    ("assign_to_pointer", 9),
+    ("pointer_assign", 9),
+    ("double_pointer_assign", 9),
+    ("assign_to_pointer_through_pointer", 9),
+])
+def test_pointers(program, answer):
+    run_and_test_program(f"test_files/pointers/{program}.bc", answer)
+
+@pytest.mark.parametrize("program, answer", [
     ("prime_count", 25), # count of primes up to 100
     ("prime_count_functional", 25), # count of primes up to 100
     ("pentagonal_numbers", 92), # see test file
@@ -124,7 +132,7 @@ def test_integration(program, answer):
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/integration/pentagonal_numbers.bc"
+    program_string = f"test_files/pointers/assign_to_pointer.bc"
     stack = compile_and_run(program_string)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)

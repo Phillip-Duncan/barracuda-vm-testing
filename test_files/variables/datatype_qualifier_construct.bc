@@ -1,2 +1,0 @@
-let a*: int = 7;
-let test = a * a;
