@@ -1,6 +1,6 @@
 /*
-Calculates How many squares, cubes, and squbes (n^6) there are between A and B, inclusive.
-Multiplies them together for a single output due to the way testingis currently done.
+Calculates how many squares, cubes, and squbes (n^6) there are between A and B, inclusive.
+Multiplies them together for a single output due to the way testing is currently done.
 */
 
 fn add_squbes(n, min, max, *squares, *cubes, *squbes) {
