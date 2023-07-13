@@ -1,0 +1,32 @@
+/*
+Calculates How many squares, cubes, and squbes (n^6) there are between A and B, inclusive.
+Multiplies them together for a single output due to the way testingis currently done.
+*/
+
+fn add_squbes(n, min, max, *squares, *cubes, *squbes) {
+    if n ^ 2 <= max {
+        if n ^ 2 >= min {
+            *squares = *squares + 1;
+        }
+    }
+    if n ^ 3 <= max {
+        if n ^ 3 >= min {
+            *cubes = *cubes + 1;
+        }
+    }
+    if n ^ 6 <= max {
+        if n ^ 6 >= min {
+            *squbes = *squbes + 1;
+        }
+    }
+}
+
+let a = 25;
+let b = 1000;
+let squares = 0;
+let cubes = 0;
+let squbes = 0;
+for (let i = 1; i * i <= b; i = i + 1) {
+    add_squbes(i, a-0.5, b+0.5, &squares, &cubes, &squbes);
+}
+let ans = squares * cubes * squbes;

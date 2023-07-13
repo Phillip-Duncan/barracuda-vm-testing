@@ -1,0 +1,9 @@
+fn testfunc() {
+    let a = 3;
+    let *b = &a;
+    let **c = &b;
+    **c = 4;
+    return a + 5;
+}
+
+let test = testfunc() + 1;

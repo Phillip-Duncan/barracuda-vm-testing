@@ -1,0 +1,7 @@
+fn testfunc(*c, d) {
+    *c = d;
+    return 0;
+} 
+let a = 4;
+testfunc(&a, 7);
+let test = 3 + a;

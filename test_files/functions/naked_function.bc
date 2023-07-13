@@ -1,0 +1,10 @@
+fn testfunc() {
+    return 3;
+} 
+// This will overflow if naked functions are implemented incorrectly
+let i = 0;
+while i < 10000 {
+    testfunc();
+    i = i + 1;
+}
+let test = testfunc() + 5;
