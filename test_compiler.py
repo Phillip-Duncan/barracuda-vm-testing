@@ -126,6 +126,16 @@ def test_pointers(program, answer):
     run_and_test_program(f"test_files/pointers/{program}.bc", answer)
 
 @pytest.mark.parametrize("program, answer", [
+    ("basic_array", 105),
+    ("one_element_array", 8),
+    ("very_long_array", 3682913),
+    ("modified_array", -777),
+    ("unassigned_array", -777),
+])
+def test_pointers(program, answer):
+    run_and_test_program(f"test_files/arrays/{program}.bc", answer)
+
+@pytest.mark.parametrize("program, answer", [
     ("prime_count", 25), # count of primes up to 100
     ("prime_count_functional", 25), # count of primes up to 100
     ("pentagonal_numbers", 92), # see test file
