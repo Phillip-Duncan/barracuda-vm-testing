@@ -53,6 +53,7 @@ def test_math_operations(program, answer):
     ("several_functions", 15),
     ("nested_functions", 15),
     ("nested_functions_with_variables", 41),
+    ("builtin_function", math.sin(1)),
     ("self_shadowing", 34), # Rare case of shadowing not producing compiler error.
     # This is because functions are not added to scope until the function definition has finished.
 
@@ -146,7 +147,7 @@ def test_integration(program, answer):
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/integration/squbes.bc"
+    program_string = f"test_files/functions/builtin_function.bc"
     stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)
