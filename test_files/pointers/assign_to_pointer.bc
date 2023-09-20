@@ -1,6 +1,6 @@
 let a = 3;
-let *b = &a;
-let **c = &b;
+let b = &a;
+let c = &b;
 let d = 4;
 b = &d;
 let e = **c + 5;

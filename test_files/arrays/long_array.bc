@@ -1,5 +1,5 @@
 // the first 10 primes added together, should be 129
-let array: [10] = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+let array = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
 let count = 0;
 for (let i = 0; i < 10; i = i + 1) {
     count = count + array[i];

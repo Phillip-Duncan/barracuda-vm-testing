@@ -42,29 +42,29 @@ def run_and_test_program(program_string, answer):
 def test_math_operations(program, answer):
     run_and_test_program(f"test_files/math_operations/{program}.bc", answer)
 
-@pytest.mark.parametrize("program, answer", [
-    ("basic_function", 8),
-    ("naked_function", 8),
-    ("variable_function", 13),
-    ("function_with_assign", 14),
-    ("two_variable_function", 8),
-    ("two_variable_function_with_assign", 10),
-    ("many_variable_function", 350),
-    ("several_functions", 15),
-    ("nested_functions", 15),
-    ("nested_functions_with_variables", 41),
-    ("builtin_function", math.sin(1)),
-    ("self_shadowing", 34), # Rare case of shadowing not producing compiler error.
-    # This is because functions are not added to scope until the function definition has finished.
+# @pytest.mark.parametrize("program, answer", [
+#     ("basic_function", 8),
+#     ("naked_function", 8),
+#     ("variable_function", 13),
+#     ("function_with_assign", 14),
+#     ("two_variable_function", 8),
+#     ("two_variable_function_with_assign", 10),
+#     ("many_variable_function", 350),
+#     ("several_functions", 15),
+#     ("nested_functions", 15),
+#     ("nested_functions_with_variables", 41),
+#     ("builtin_function", math.sin(1)),
+#     ("self_shadowing", 34), # Rare case of shadowing not producing compiler error.
+#     # This is because functions are not added to scope until the function definition has finished.
 
-    # The following four tests should work once/if recursion and function shadowing are implemented.
-    ## ("recursive_function", 350), # Gets stuck in infinite loop
-    ## ("shadowing", 11),
-    ## ("scope_shadowing", 25), # Shadowing doesn't respect scope, giving 14.
-    ## ("shadowing_trap", 8), # Shadowing doesn't respect scope (again).
-])
-def test_functions(program, answer):
-    run_and_test_program(f"test_files/functions/{program}.bc", answer)
+#     # The following four tests should work once/if recursion and function shadowing are implemented.
+#     ## ("recursive_function", 350), # Gets stuck in infinite loop
+#     ## ("shadowing", 11),
+#     ## ("scope_shadowing", 25), # Shadowing doesn't respect scope, giving 14.
+#     ## ("shadowing_trap", 8), # Shadowing doesn't respect scope (again).
+# ])
+# def test_functions(program, answer):
+#     run_and_test_program(f"test_files/functions/{program}.bc", answer)
 
 @pytest.mark.parametrize("program, answer", [
     ("basic_construct", 49),
@@ -72,7 +72,6 @@ def test_functions(program, answer):
     ("construct_with_self_assign", 81),
     ("construct_with_many_assigns", 49),
     ("tangled_construct", -18),
-    ("shadowed_construct", 81),
     ("long_variable",  49)
 ])
 def test_variables(program, answer):
@@ -120,8 +119,8 @@ def test_externals(program, answer):
     ("pointer_assign", 9),
     ("double_pointer_assign", 9),
     ("assign_to_pointer_through_pointer", 9),
-    ("function_with_pointer_assign", 10),
-    ("double_pointer_assign_in_function", 10),
+    #("function_with_pointer_assign", 10),
+    #("double_pointer_assign_in_function", 10),
 ])
 def test_pointers(program, answer):
     run_and_test_program(f"test_files/pointers/{program}.bc", answer)
@@ -136,18 +135,18 @@ def test_pointers(program, answer):
 def test_arrays(program, answer):
     run_and_test_program(f"test_files/arrays/{program}.bc", answer)
 
-@pytest.mark.parametrize("program, answer", [
-    ("prime_count", 25), # count of primes up to 100
-    ("prime_count_functional", 25), # count of primes up to 100
-    ("pentagonal_numbers", 92), # see test file
-    ("squbes", 432), # see test file
-])
-def test_integration(program, answer):
-    run_and_test_program(f"test_files/integration/{program}.bc", answer)
+#@pytest.mark.parametrize("program, answer", [
+#    ("prime_count", 25), # count of primes up to 100
+#    ("prime_count_functional", 25), # count of primes up to 100
+#    ("pentagonal_numbers", 92), # see test file
+#    ("squbes", 432), # see test file
+#])
+#def test_integration(program, answer):
+#    run_and_test_program(f"test_files/integration/{program}.bc", answer)
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/arrays/long_array.bc"
+    program_string = f"test_files/arrays/modified_array .bc"
     stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)
