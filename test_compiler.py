@@ -130,6 +130,8 @@ def test_pointers(program, answer):
     ("one_element_array", 8),
     ("long_array", 129),
     ("modified_array", -777),
+    ("multidimensional_array", 11),
+    ("multidimensional_array_with_for_loops", 21)
     #("unassigned_array", -777), #need to implement this
 ])
 def test_arrays(program, answer):
@@ -146,7 +148,7 @@ def test_arrays(program, answer):
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/arrays/modified_array .bc"
+    program_string = f"test_files/arrays/multidimensional_array_with_for_loops.bc"
     stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)

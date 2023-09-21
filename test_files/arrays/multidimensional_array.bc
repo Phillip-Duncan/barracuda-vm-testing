@@ -1,0 +1,3 @@
+let array = [[0,0],[0,10],[0,0]];
+
+let count = array[1][1] + 1;
