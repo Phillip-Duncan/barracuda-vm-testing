@@ -131,7 +131,14 @@ def test_pointers(program, answer):
     ("long_array", 129),
     ("modified_array", -777),
     ("multidimensional_array", 11),
-    ("multidimensional_array_with_for_loops", 21)
+    ("multidimensional_array_split", 11),
+    ("multidimensional_array_assign", 11),
+    ("multidimensional_array_split_assign", 11),
+    ("multidimensional_array_with_for_loops", 21),
+    ("array_assign", 105),
+    ("second_array_assign", 105),
+    ("pointer_to_array", 6),
+    ("double_pointer_to_array", 6),
     #("unassigned_array", -777), #need to implement this
 ])
 def test_arrays(program, answer):
@@ -148,7 +155,7 @@ def test_arrays(program, answer):
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/arrays/multidimensional_array_with_for_loops.bc"
+    program_string = f"test_files/arrays/multidimensional_array_split_assign.bc"
     stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)
