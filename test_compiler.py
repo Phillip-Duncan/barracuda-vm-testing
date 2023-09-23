@@ -72,7 +72,9 @@ def test_math_operations(program, answer):
     ("construct_with_self_assign", 81),
     ("construct_with_many_assigns", 49),
     ("tangled_construct", -18),
-    ("long_variable",  49)
+    ("long_variable",  49),
+    ("empty_construct",  49),
+    ("empty_construct_pause",  49),
 ])
 def test_variables(program, answer):
     run_and_test_program(f"test_files/variables/{program}.bc", answer)
@@ -139,7 +141,8 @@ def test_pointers(program, answer):
     ("second_array_assign", 105),
     ("pointer_to_array", 6),
     ("double_pointer_to_array", 6),
-    #("unassigned_array", -777), #need to implement this
+    ("unassigned_array", -777),
+    ("unassigned_array_double", 193),
 ])
 def test_arrays(program, answer):
     run_and_test_program(f"test_files/arrays/{program}.bc", answer)
@@ -155,7 +158,7 @@ def test_arrays(program, answer):
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/arrays/multidimensional_array_split_assign.bc"
+    program_string = f"test_files/arrays/unassigned_array.bc"
     stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)
