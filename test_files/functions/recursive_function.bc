@@ -1,8 +1,0 @@
-fn testfunc(a) {
-    if a < 1.5 { // Instead of a == 1 because barracuda always uses floats
-        return 1;
-    } else {
-        return a + testfunc(a - 1);
-    }
-} 
-let test = testfunc(26) - 1;

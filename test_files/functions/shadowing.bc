@@ -1,7 +1,0 @@
-fn testfunc(a) {
-    return 3 + a;
-} 
-fn testfunc(a) {
-    return 1 + a;
-} 
-let test = testfunc(8) + 2;
