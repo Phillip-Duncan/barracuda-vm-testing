@@ -150,7 +150,7 @@ def test_integration(program, answer):
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/integration/prime_count_functional.bc"
+    program_string = f"test_files/integration/squbes.bc"
     stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)
