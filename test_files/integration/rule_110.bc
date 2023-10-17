@@ -1,0 +1,46 @@
+/*
+Simulates Rule 110. See https://en.wikipedia.org/wiki/Rule_110
+*/
+
+fn apply_rule_110(tape, i) -> bool {
+    if tape[i] + tape[i + 1] == 1 {
+        return true;
+    } else if (tape[i - 1] == 0) * (tape[i] == 1) * (tape[i + 1] == 1) == 1 {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+let tape: [bool; 6];
+let next_tape: [bool; 6];
+let i: i64 = 0;
+while i < 6 {
+    tape[i] = false;
+    next_tape[i] = false;
+    i = i + 1;
+}
+// Set the initial condition
+tape[4] = true;
+
+// Number of generations to simulate
+let NUM_GENERATIONS = 3;
+
+// Simulate Rule 110 for the specified number of generations
+for (let gen = 0; gen < NUM_GENERATIONS; gen = gen + 1) {
+    i = 1;
+    // Apply Rule 110 to update the next generation
+    while i < 5 {
+        next_tape[i] = apply_rule_110(tape, i); 
+        i = i + 1;
+    }
+    i = 0;
+    while i < 6 {
+        tape[i] = next_tape[i];
+        i = i + 1;
+    }
+}
+let out = 0;
+for (let tapepos = 0; tapepos < 6; tapepos = tapepos + 1) {
+    out = out + tape[tapepos] * 2 ^ tapepos;
+}

@@ -38,6 +38,7 @@ def run_and_test_program(program_string, answer):
     ("power_negative", 0.3333333333), # 3 ^ -1
     ("power_fractional", 1.97159185937), # 3.1 ^ 0.6
     ("power_nan", math.nan), # -1 ^ 0.5
+    ("ternary", 33),
 ])
 def test_math_operations(program, answer):
     run_and_test_program(f"test_files/math_operations/{program}.bc", answer)
@@ -142,15 +143,17 @@ def test_arrays(program, answer):
 @pytest.mark.parametrize("program, answer", [
    ("prime_count", 25), # count of primes up to 100
    ("prime_count_functional", 25), # count of primes up to 100
-   ("pentagonal_numbers", 92), # see test file
-   ("squbes", 432), # see test file
+   ("pentagonal_numbers", 92),
+   ("squbes", 432),
+   ("squbes_typed", 432),
+   ("rule_110", 22) # a binary representation of the real rule110 answer for the given simulation.
 ])
 def test_integration(program, answer):
    run_and_test_program(f"test_files/integration/{program}.bc", answer)
 
 # For running individual tests without pytest and with more control
 def debug():
-    program_string = f"test_files/integration/squbes.bc"
+    program_string = f"test_files/integration/rule_110.bc"
     stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)
