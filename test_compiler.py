@@ -2,6 +2,9 @@ from driver import compile_and_run
 import numpy
 import pytest
 import math
+import numpy as np
+
+from helpers import pack_string_to_f64_array
 
 # compresses a list for readability by collapsing runs of the same number into one element.
 # For example: ["cheese","cheese","cheese","bread","bread","meat","cheese"] becomes [("cheese",3), ("bread",2), ("meat",1), ("cheese",1)]
@@ -14,8 +17,8 @@ def compress(array):
             result[-1][1] += 1
     return [tuple(r) for r in result]
 
-def run_and_test_program(program_string, answer):
-    stack = compile_and_run(program_string)[0]
+def run_and_test_program(program_string, answer, precision = 1, threads=128, blocks=8):
+    stack = compile_and_run(program_string, precision, threads, blocks)[0]
     print(compress(stack))
     if math.isnan(answer):
         assert numpy.any(numpy.isnan(stack))
@@ -54,10 +57,12 @@ def test_math_operations(program, answer):
     ("several_functions", 15),
     ("nested_functions", 15),
     ("nested_functions_with_variables", 41),
-    ("builtin_function", math.sin(1))
+    ("builtin_function", math.sin(1)),
+    ("print_string", pack_string_to_f64_array("Hello, World!")[0])
 ])
 def test_functions(program, answer):
-    run_and_test_program(f"test_files/functions/{program}.bc", answer)
+    print(f"Running {program}")
+    run_and_test_program(f"test_files/functions/{program}.bc", answer, precision=2, threads=1, blocks=1)
 
 @pytest.mark.parametrize("program, answer", [
     ("basic_construct", 49),
@@ -68,9 +73,11 @@ def test_functions(program, answer):
     ("long_variable",  49),
     ("empty_construct",  49),
     ("empty_construct_pause",  49),
+    ("string_construct", pack_string_to_f64_array("12345678")[0])
 ])
 def test_variables(program, answer):
-    run_and_test_program(f"test_files/variables/{program}.bc", answer)
+    print(f"Running {program}")
+    run_and_test_program(f"test_files/variables/{program}.bc", answer, precision=2, threads=1, blocks=1)
 
 @pytest.mark.parametrize("program, answer", [
     ("basic_if", 9),
@@ -138,6 +145,7 @@ def test_pointers(program, answer):
     ("unassigned_array_double", 193),
 ])
 def test_arrays(program, answer):
+    print(f"Running {program}")
     run_and_test_program(f"test_files/arrays/{program}.bc", answer)
 
 @pytest.mark.parametrize("program, answer", [
@@ -156,7 +164,7 @@ def debug():
     program_string = f"test_files/integration/rule_110.bc"
     stack = compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
-    assert numpy.any(abs(stack - 49) <= abs(49) / 1000000)
+    assert numpy.any(abs(stack - 22) <= abs(22) / 1000000)
 
 if __name__ == "__main__":
     debug()

@@ -46,23 +46,28 @@ class _CompilerResponse(ctypes.Structure):
                 ("instructions_list", _Vec_uint32_t),
                 ("operations_list", _Vec_uint64_t),
                 ("values_list", _Vec_float_t),
-                ("recommended_stack_size", ctypes.c_size_t)
+                ("recommended_stack_size", ctypes.c_size_t),
+                ("user_space_size", ctypes.c_size_t)
                 )
 
 
 class _CompilerRequest(ctypes.Structure):
     _fields_ = (("code_text", ctypes.c_char_p),
                 ("env_vars", _Vec_EnvironmentVariable_t),
+                ("precision", ctypes.c_size_t),
                 )
 
 
 class Barracuda:
-    def __init__(self, lib_dir: str = '', env_cfg_dir: str = ''):
+    def __init__(self, lib_dir: str = '', env_cfg_dir: str = '', precision: int = 32):
         """Initialises Barracuda object for compilation of Barracuda scripts into bytecode arrays.
 
         Args:
             lib_dir: library directory where barracuda_compiler shared library is located. (e.g, C:/bcc_lib/),
             defaults to compiler included in package install location.
+            env_cfg_dir: directory where environment configuration file is located. (e.g, C:/env_cfg/),
+            defaults to package install location.
+            precision: precision of floating point numbers, either 32 or 64 bits, defaults to 32.
         """
         if not lib_dir:
             self.lib_dir = f'{os.path.dirname(os.path.realpath(__file__))}/compiler'
@@ -77,6 +82,8 @@ class Barracuda:
         self.compiler = None
 
         self.osname = sys.platform.upper()
+
+        self.precision = precision
 
         self.instructions: numpy.typing.NDArray[numpy.int32] = numpy.array([], dtype=numpy.int32)
         self.values: numpy.typing.NDArray[numpy.float64] = numpy.array([], dtype=numpy.float64)
@@ -171,7 +178,7 @@ class Barracuda:
         bc_string = code.encode('utf-8')
         code_ptr = ctypes.c_char_p(bc_string)
 
-        c_req = _CompilerRequest(code_ptr, env_vars)
+        c_req = _CompilerRequest(code_ptr, env_vars, self.precision)
         c_req_ptr = ctypes.pointer(c_req)
 
         output.append(compile_func(c_req_ptr))
@@ -227,7 +234,9 @@ class Barracuda:
 
         stack_size = int(compiled_output.recommended_stack_size)
 
-        self.sizes = numpy.array([self.instructions.size, self.operations.size, self.values.size, stack_size, 0],
+        user_space_size = int(compiled_output.user_space_size)
+
+        self.sizes = numpy.array([self.instructions.size, self.operations.size, self.values.size, stack_size, user_space_size],
                                  dtype=numpy.int32)
 
         return self

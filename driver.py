@@ -24,7 +24,7 @@ def compile_and_run(program, precision: int = 1, threads: int = 128, blocks: int
     long_ptr = ndpointer(ctypes.c_long, flags=CTF)  # type: ignore # noqa: F841
     longlong_ptr = ndpointer(ctypes.c_longlong, flags=CTF)  # type: ignore
 
-    bc = Barracuda()
+    bc = Barracuda(precision = int(precision * 32))
     bc.load(program)
 
     user_space = numpy.array([])
