@@ -1,7 +1,0 @@
-
-let b = "hello world";
-
-
-//let c = 2.0;
-
-print b;

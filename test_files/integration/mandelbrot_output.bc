@@ -1,0 +1,94 @@
+let width = 80;
+let height = 40;
+
+let xmin = -2.0;
+let xmax = 1.0;
+let ymin = -1.0;
+let ymax = 1.0;
+
+let max_iter = 500;
+
+
+let i = 0;
+let j = 0;
+
+let x0 = 0;
+let y0 = 0;
+let x = 0;
+let y = 0;
+
+let iteration = 0;
+
+
+let x_tmp = 0;
+
+
+let c1 = "*";
+let c2 = ".";
+let c3 = "-";
+let c4 = "+";
+let c5 = "x";
+let c6 = "o";
+let c7 = "O";
+let c8 = "@";
+let c9 = "#";
+let c10 = "%";
+let nlc = "\n";
+
+while i < height {
+    j = 0;
+    while j < width {
+        x0 = xmin + j * (xmax - xmin) / (width - 1);
+        y0 = ymin + i * (ymax - ymin) / (height - 1);
+
+        x = 0;
+        y = 0;
+        iteration = 0;
+
+        while ((x*x + y*y <= 4) * (iteration < max_iter)) {
+            x_tmp = x*x - y*y + x0;
+            y = 2 * x * y + y0;
+            x = x_tmp;
+            iteration = iteration + 1;
+        }
+
+        if (iteration == max_iter) {
+            print(c1);
+        }
+        else {
+            if (iteration > max_iter * 0.9) {
+                print(c2);
+            }
+            else if (iteration > max_iter * 0.8) {
+                print(c3);
+            }
+            else if (iteration > max_iter * 0.7) {
+                print(c4);
+            }
+            else if (iteration > max_iter * 0.6) {
+                print(c5);
+            }
+            else if (iteration > max_iter * 0.5) {
+                print(c6);
+            }
+            else if (iteration > max_iter * 0.4) {
+                print(c7);
+            }
+            else if (iteration > max_iter * 0.3) {
+                print(c8);
+            }
+            else if (iteration > max_iter * 0.2) {
+                print(c9);
+            }
+            else {
+                print(c10);
+            }
+        }
+
+        j = j + 1;
+    }
+
+    print(nlc);
+
+    i = i + 1;
+}

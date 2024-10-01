@@ -1,0 +1,41 @@
+let cc = "cc";
+
+
+let a: [f64; 50];
+let b: [f64; 50];
+
+
+let nlc = "\n";
+let alive_char = "*";
+let dead_char = " ";
+
+for (let i = 0; i < 50; i = i + 1) {
+    a[i] = 200;
+    b[i] = 133;
+}
+
+for (let j = 0; j < 50; j = j + 1) {
+    a[j] = 200;
+    b[j] = 133;
+}
+
+
+for (let k = 0; k < 50; k = k + 1) {
+    a[k] = 200;
+    b[k] = 133;
+}
+
+print(b[49]);
+print(b[0]);
+
+
+
+print(a[49]);
+
+print(a[0]);
+
+print(alive_char);
+
+print(dead_char);
+
+print(nlc);

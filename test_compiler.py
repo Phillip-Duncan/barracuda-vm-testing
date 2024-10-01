@@ -1,4 +1,4 @@
-from driver import compile_and_run
+from driver import Driver
 import numpy
 import pytest
 import math
@@ -17,8 +17,9 @@ def compress(array):
             result[-1][1] += 1
     return [tuple(r) for r in result]
 
-def run_and_test_program(program_string, answer, precision = 1, threads=128, blocks=8):
-    stack = compile_and_run(program_string, precision, threads, blocks)[0]
+def run_and_test_program(program_string, answer, precision = 2, threads=1, blocks=1):
+    driver = Driver()
+    stack, bc = driver.compile_and_run(program_string, precision, threads, blocks)
     print(compress(stack))
     if math.isnan(answer):
         assert numpy.any(numpy.isnan(stack))
@@ -58,11 +59,21 @@ def test_math_operations(program, answer):
     ("nested_functions", 15),
     ("nested_functions_with_variables", 41),
     ("builtin_function", math.sin(1)),
-    ("print_string", pack_string_to_f64_array("Hello, World!")[0])
+
 ])
 def test_functions(program, answer):
     print(f"Running {program}")
-    run_and_test_program(f"test_files/functions/{program}.bc", answer, precision=2, threads=1, blocks=1)
+    run_and_test_program(f"test_files/functions/{program}.bc", answer, precision=1, threads=1, blocks=1)
+
+
+@pytest.mark.parametrize("program, answer", [
+    # For print statements, use "pytest -s" to see the output is correct.
+    ("print_string", 7.986283854862652e-148), # The last thing that will be left on the stack is a newline character
+    ("print_array", 3), # 1 will still be left on the stack
+])
+def test_stdout(program, answer):
+    print(f"Running {program}")
+    run_and_test_program(f"test_files/stdout/{program}.bc", answer)
 
 @pytest.mark.parametrize("program, answer", [
     ("basic_construct", 49),
@@ -73,7 +84,6 @@ def test_functions(program, answer):
     ("long_variable",  49),
     ("empty_construct",  49),
     ("empty_construct_pause",  49),
-    ("string_construct", pack_string_to_f64_array("12345678")[0])
 ])
 def test_variables(program, answer):
     print(f"Running {program}")
@@ -154,15 +164,51 @@ def test_arrays(program, answer):
    ("pentagonal_numbers", 92),
    ("squbes", 432),
    ("squbes_typed", 432),
-   ("rule_110", 22) # a binary representation of the real rule110 answer for the given simulation.
+   ("rule_110", 22), # a binary representation of the real rule110 answer for the given simulation.
 ])
 def test_integration(program, answer):
+   print(f"Running {program}")
    run_and_test_program(f"test_files/integration/{program}.bc", answer)
+
+
+#def test_mandelbrot():
+#    driver = Driver()
+#    stack, bc = driver.compile_and_run(f'test_files/integration/mandelbrot_mp.bc', 2, 128, 128)
+
+def debug_mandelbrot():
+    driver = Driver()
+
+    program_string = f"test_files/integration/mandelbrot_mp.bc"
+    nt, nb = 756, 756
+    stack, bc = driver.compile_and_run(program_string, precision=2, threads=nt, blocks=nb)
+    
+
+    import matplotlib.pyplot as plt
+    import matplotlib.colors as colors
+    print(driver.user_space[0:nt*nb])
+    print(driver.user_space[nt*nb:2*nt*nb])
+
+    iter = driver.user_space[0:nt*nb].reshape((nt, nb))
+
+
+    fig = plt.figure()
+    ax = fig.add_axes([0.0, 0.0, 1.0, 1.0], frameon=False, aspect=1)
+
+    # Shaded rendering
+    light = colors.LightSource(azdeg=315, altdeg=10)
+    M = light.shade(iter, cmap=plt.cm.hot, vert_exag=1.5,
+                    norm=colors.PowerNorm(0.3), blend_mode='hsv')
+    plt.imshow(iter, extent=[-1.0, 1.0, -2.0, 1.0], interpolation="bicubic")
+    ax.set_xticks([])
+    ax.set_yticks([])
+    plt.show()
+
 
 # For running individual tests without pytest and with more control
 def debug():
+    driver = Driver()
     program_string = f"test_files/integration/rule_110.bc"
-    stack = compile_and_run(program_string, threads=1, blocks=1)[0]
+    stack = driver.compile_and_run(program_string, threads=1, blocks=1)[0]
     print(compress(stack))
     assert numpy.any(abs(stack - 22) <= abs(22) / 1000000)
 

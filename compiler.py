@@ -4,7 +4,7 @@ import sys
 import os
 import threading
 
-_c_float_p = ctypes.POINTER(ctypes.c_double)
+_c_double_p = ctypes.POINTER(ctypes.c_double)
 _c_uint32_p = ctypes.POINTER(ctypes.c_uint32)
 _c_uint64_p = ctypes.POINTER(ctypes.c_uint64)
 
@@ -21,8 +21,8 @@ class _Vec_uint64_t(ctypes.Structure):
                 ("cap", ctypes.c_size_t),)
 
 
-class _Vec_float_t(ctypes.Structure):
-    _fields_ = (("ptr", _c_float_p),
+class _Vec_double_t(ctypes.Structure):
+    _fields_ = (("ptr", _c_double_p),
                 ("len", ctypes.c_size_t),
                 ("cap", ctypes.c_size_t),)
 
@@ -45,9 +45,10 @@ class _CompilerResponse(ctypes.Structure):
     _fields_ = (("code_text", ctypes.c_char_p),
                 ("instructions_list", _Vec_uint32_t),
                 ("operations_list", _Vec_uint64_t),
-                ("values_list", _Vec_float_t),
+                ("values_list", _Vec_double_t),
                 ("recommended_stack_size", ctypes.c_size_t),
-                ("user_space_size", ctypes.c_size_t)
+                ("user_space_size", ctypes.c_size_t),
+                ("user_space", _Vec_double_t)
                 )
 
 
@@ -83,11 +84,12 @@ class Barracuda:
 
         self.osname = sys.platform.upper()
 
-        self.precision = precision
+        self.precision = int(precision)
 
         self.instructions: numpy.typing.NDArray[numpy.int32] = numpy.array([], dtype=numpy.int32)
         self.values: numpy.typing.NDArray[numpy.float64] = numpy.array([], dtype=numpy.float64)
         self.operations: numpy.typing.NDArray[numpy.int64] = numpy.array([], dtype=numpy.int64)
+        self.user_space: numpy.typing.NDArray[numpy.float64] = numpy.array([], dtype=numpy.float64)
 
         self.sizes: numpy.typing.NDArray[numpy.int32] = numpy.zeros(5, dtype=numpy.int32)
 
@@ -228,6 +230,8 @@ class Barracuda:
         self.values = numpy.ctypeslib.as_array(compiled_output.values_list.ptr,
                                                shape=(compiled_output.values_list.cap,))  # .astype(numpy.float64)
 
+        self.user_space = numpy.ctypeslib.as_array(compiled_output.user_space.ptr, shape=(compiled_output.user_space.cap,)).astype(numpy.float64)
+            
         self.instructions = numpy.concatenate(([0], self.instructions)).astype(numpy.int32)
         self.values = numpy.concatenate(([0], self.values))
         self.operations = numpy.concatenate(([0], self.operations))

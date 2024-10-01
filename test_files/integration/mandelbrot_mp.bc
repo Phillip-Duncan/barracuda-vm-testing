@@ -1,0 +1,55 @@
+let tid = __longlongtodouble(__ldtid());
+
+let n_thread = __longlongtodouble(__ldnt());
+
+let sqthread = __floor(__sqrt(n_thread)); // Find equivalent square of threads and blocks
+
+
+
+let xmin = -2.0;
+let xmax = 1.0;
+let ymin = -1.0;
+let ymax = 1.0;
+
+let max_iter = 1500;
+
+
+let i = 0;
+let j = 0;
+
+let x0 = 0;
+let y0 = 0;
+let x = 0;
+let y = 0;
+
+let iteration = 0;
+
+
+let x_tmp = 0;
+
+
+// Storage for iteration and max_iter values;
+let storage: [f64; 2];
+
+
+i = (tid % sqthread);
+j = __floor(tid / sqthread);
+
+
+// Mandelbrot logic only if exits on the square to draw on.
+if (tid <= sqthread * sqthread) {
+
+    x0 = xmin + j * (xmax - xmin) / (sqthread - 1);
+    y0 = ymin + i * (ymax - ymin) / (sqthread - 1);
+
+    while ( (x*x + y*y <= 4) * (iteration < max_iter) ) {
+        x_tmp = x*x - y*y + x0;
+        y = 2*x*y + y0;
+        x = x_tmp;
+        iteration = iteration + 1;
+    }
+
+    storage[0] = iteration;
+    storage[1] = max_iter;
+
+}

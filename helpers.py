@@ -1,24 +1,36 @@
-import numpy as np
+from typing import List
 import struct
 
-# Packs a string into an array of 64-bit floating point numbers.
-def pack_string_to_f64_array(s: str) -> np.ndarray:
-    # Ensure the string is a multiple of 8 by padding with '\0' if needed
-    padded_string = s + '\0' * (8 - len(s) % 8) if len(s) % 8 != 0 else s
-    
-    float_array = []
-    
-    # Iterate over the string in chunks of 8 characters
-    for i in range(0, len(padded_string), 8):
-        chunk = padded_string[i:i+8]
-        
-        # Convert the 8 characters into a little-endian 64-bit integer
-        packed_int = int.from_bytes(chunk.encode('ascii'), byteorder='little')
-        
-        # Now interpret the integer as a float64
-        packed_float = struct.unpack('<d', struct.pack('<Q', packed_int))[0]
-        
-        # Append to the float array
-        float_array.append(packed_float)
-    
-    return np.array(float_array, dtype=np.float64)
+def pack_string_to_f64_array(input: str, precision: int = 64) -> List[float]:
+    result = []
+    bytes_data = input.encode('utf-8')
+
+    if precision == 32:
+        chunk_size = 4  # 4 bytes for 32-bit precision
+    elif precision == 64:
+        chunk_size = 8  # 8 bytes for 64-bit precision
+    else:
+        raise ValueError(f"Unsupported precision: {precision}")
+
+    for i in range(0, len(bytes_data), chunk_size):
+        chunk = bytes_data[i:i + chunk_size]
+        packed = 0
+        for j, byte in enumerate(chunk):
+            packed |= byte << (j * 8)
+
+        # Shift the packed value to the left to fill the remaining bits with 0s
+        packed <<= 8 * (chunk_size - len(chunk))
+
+        if precision == 32:
+            packed_bytes = packed.to_bytes(4, byteorder='little')
+            float_value = struct.unpack('<f', packed_bytes)[0]
+            result.append(float(float_value))  # Convert to float64
+        elif precision == 64:
+            packed_bytes = packed.to_bytes(8, byteorder='little')
+            float_value = struct.unpack('<d', packed_bytes)[0]
+            result.append(float_value)
+        else:
+            # This point should not be reached due to the earlier check
+            pass
+
+    return result
