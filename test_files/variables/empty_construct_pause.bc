@@ -1,6 +1,6 @@
 let a = 1;
 let b: f32;
-let c: f32;
+let mut c: f32;
 let d: f32;
 let e = 1;
 c = 7;

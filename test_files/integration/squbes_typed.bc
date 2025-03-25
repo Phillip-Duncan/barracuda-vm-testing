@@ -2,7 +2,7 @@
 A version of 'squbes' with types added.
 */
 
-fn add_squbes(n: i64, min: i64, max: i64, squares: *i64, cubes: *i64, squbes: *i64) -> none {
+fn add_squbes(n: i64, min: i64, max: i64, mut squares: *i64, mut cubes: *i64, mut squbes: *i64) -> none {
     if n ^ 2 <= max {
         if n ^ 2 >= min {
             *squares = *squares + 1;
@@ -25,7 +25,7 @@ let b: i64 = 1000;
 let squares: i64 = 0;
 let cubes: i64 = 0;
 let squbes: i64 = 0;
-for (let i: i64 = 1; i * i <= b; i = i + 1) {
+for (let mut i: i64 = 1; i * i <= b; i = i + 1) {
     add_squbes(i, a-0.5, b+0.5, &squares, &cubes, &squbes);
 }
 let ans: i64 = squares * cubes * squbes;

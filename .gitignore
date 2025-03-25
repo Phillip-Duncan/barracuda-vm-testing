@@ -156,3 +156,6 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 .coverage
+
+# Specific images/files produced by testing suite 
+mandelbrot.png

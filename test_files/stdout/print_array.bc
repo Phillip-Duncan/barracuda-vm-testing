@@ -1,5 +1,9 @@
-let a = [1,2,3];
-for (let i = 0; i < 3; i = i + 1)
+let const a = [1,2,3];
+let mut b = [9,8,7];
+for (let mut i = 0; i < 3; i = i + 1)
 {
     print(a[i]);
+    print(b[i]);
 }
+print(a);
+print(b);

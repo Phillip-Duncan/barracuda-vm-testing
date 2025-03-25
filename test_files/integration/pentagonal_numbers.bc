@@ -4,7 +4,7 @@ fn pentagon(n) {
 }
 
 fn is_pentagon(n) {
-    let p = 1;
+    let mut p = 1;
     while pentagon(p) <= n {
         if pentagon(p) == n {
             return true;
@@ -20,11 +20,11 @@ fn is_pentagon(n) {
     add to a third pentagon number
 */
 fn find_pentagons() {
-    let pentagon_i = 0;
-    let pentagon_j = 0;
-    for (let i = 1; i < 10; i = i + 1) {
+    let mut pentagon_i = 0;
+    let mut pentagon_j = 0;
+    for (let mut i = 1; i < 10; i = i + 1) {
         pentagon_i = pentagon(i);
-        for (let j = 1; j < i; j = j + 1) {
+        for (let mut j = 1; j < i; j = j + 1) {
             pentagon_j = pentagon(j);
             if is_pentagon(pentagon_j + pentagon_i) {
                 return pentagon_j + pentagon_i;

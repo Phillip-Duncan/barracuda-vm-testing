@@ -1,5 +1,5 @@
-let b = 1;
-for (let a = 0; a < 0; a = a + 1) {
+let mut b = 1;
+for (let mut a = 0; a < 0; a = a + 1) {
     b = b + 1000;
 }
 let test = b + 2;

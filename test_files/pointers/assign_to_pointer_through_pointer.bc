@@ -1,7 +1,7 @@
 let a = 3;
 let b = &a;
-let c = &b;
-let d = &c;
+let mut c = &b;
+let mut d = &c;
 let e = 4;
 let f = &e;
 *c = f;

@@ -31,7 +31,8 @@ class _EnvironmentVariable(ctypes.Structure):
     _fields_ = (("identifier", ctypes.c_char_p),
                 ("ptr_offset", ctypes.c_size_t),
                 ("datatype", ctypes.c_char_p),
-                ("qualifier", ctypes.c_char_p)
+                ("qualifier", ctypes.c_char_p),
+                ("ptr_levels", ctypes.c_char_p),
                 )
 
 
@@ -47,7 +48,7 @@ class _CompilerResponse(ctypes.Structure):
                 ("operations_list", _Vec_uint64_t),
                 ("values_list", _Vec_double_t),
                 ("recommended_stack_size", ctypes.c_size_t),
-                ("user_space_size", ctypes.c_size_t),
+                ("user_space_size", _Vec_uint64_t),
                 ("user_space", _Vec_double_t)
                 )
 
@@ -86,14 +87,14 @@ class Barracuda:
 
         self.precision = int(precision)
 
+        self.env_var_count: int = 0
+
         self.instructions: numpy.typing.NDArray[numpy.int32] = numpy.array([], dtype=numpy.int32)
         self.values: numpy.typing.NDArray[numpy.float64] = numpy.array([], dtype=numpy.float64)
         self.operations: numpy.typing.NDArray[numpy.int64] = numpy.array([], dtype=numpy.int64)
         self.user_space: numpy.typing.NDArray[numpy.float64] = numpy.array([], dtype=numpy.float64)
 
-        self.sizes: numpy.typing.NDArray[numpy.int32] = numpy.zeros(5, dtype=numpy.int32)
-
-        # self.stack_size: int = 0
+        self.sizes: numpy.typing.NDArray[numpy.int32] = numpy.zeros(6, dtype=numpy.int32)
 
     def read_environment_config(self, file):
         if file == '':
@@ -109,16 +110,19 @@ class Barracuda:
         for (i, line) in enumerate(parsed_text):
             var = line.split(':')
 
-            if len(var) == 4:
+            if len(var) == 5:
                 new_env = _EnvironmentVariable()
                 new_env.ptr_offset = ctypes.c_size_t(int(var[0]))
                 new_env.identifier = ctypes.c_char_p(var[1].encode('utf-8'))
                 new_env.datatype = ctypes.c_char_p(var[2].encode('utf-8'))
                 new_env.qualifier = ctypes.c_char_p(var[3].encode('utf-8'))
+                new_env.ptr_levels = ctypes.c_char_p(var[4].encode('utf-8'))
 
                 env_vars.append(new_env)
             else:
-                continue
+                print(f"Invalid environment variable format: {line}")
+
+        self.env_var_count = len(env_vars)
 
         elems = (_EnvironmentVariable * len(env_vars))()
         struct_array = ctypes.cast(elems, ctypes.POINTER(_EnvironmentVariable))
@@ -238,9 +242,9 @@ class Barracuda:
 
         stack_size = int(compiled_output.recommended_stack_size)
 
-        user_space_size = int(compiled_output.user_space_size)
+        user_space_size = numpy.ctypeslib.as_array(compiled_output.user_space_size.ptr, shape=(compiled_output.user_space_size.cap,)).astype(numpy.int64)
 
         self.sizes = numpy.array([self.instructions.size, self.operations.size, self.values.size, stack_size, user_space_size],
-                                 dtype=numpy.int32)
+                                 dtype=object)
 
         return self

@@ -3,7 +3,7 @@ Calculates how many squares, cubes, and squbes (n^6) there are between A and B, 
 Multiplies them together for a single output due to the way testing is currently done.
 */
 
-fn add_squbes(n, min, max, squares, cubes, squbes) {
+fn add_squbes(n, min, max, mut squares, mut cubes, mut squbes) {
     if n ^ 2 <= max {
         if n ^ 2 >= min {
             *squares = *squares + 1;
@@ -26,7 +26,7 @@ let b = 1000;
 let squares = 0;
 let cubes = 0;
 let squbes = 0;
-for (let i = 1; i * i <= b; i = i + 1) {
+for (let mut i = 1; i * i <= b; i = i + 1) {
     add_squbes(i, a-0.5, b+0.5, &squares, &cubes, &squbes);
 }
 let ans = squares * cubes * squbes;

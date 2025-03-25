@@ -4,32 +4,29 @@ let n_thread = __longlongtodouble(__ldnt());
 
 let sqthread = __floor(__sqrt(n_thread)); // Find equivalent square of threads and blocks
 
+let mut xmin = -2.0;
+let mut xmax = 1.0;
+let mut ymin = -1.0;
+let mut ymax = 1.0;
 
+let const max_iter = 1500;
 
-let xmin = -2.0;
-let xmax = 1.0;
-let ymin = -1.0;
-let ymax = 1.0;
+let const a = [0];
 
-let max_iter = 1500;
+let mut i = a[0];
+let mut j = 0;
 
+let mut x0 = 0;
+let mut y0 = 0;
+let mut x = 0;
+let mut y = 0;
 
-let i = 0;
-let j = 0;
+let mut iteration = 0;
 
-let x0 = 0;
-let y0 = 0;
-let x = 0;
-let y = 0;
-
-let iteration = 0;
-
-
-let x_tmp = 0;
-
+let mut x_tmp = 0;
 
 // Storage for iteration and max_iter values;
-let storage: [f64; 2];
+let mut storage: [f64; 2];
 
 
 i = (tid % sqthread);

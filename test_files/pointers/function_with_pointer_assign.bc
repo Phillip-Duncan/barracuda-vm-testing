@@ -1,4 +1,4 @@
-fn testfunc(c, d) {
+fn testfunc(mut c, d) {
     *c = d;
     return 0;
 } 

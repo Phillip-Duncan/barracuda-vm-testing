@@ -3,6 +3,11 @@ import numpy
 import pytest
 import math
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.colors as colors
+from matplotlib.cm import get_cmap
+import matplotlib as mpl
+mpl.rcParams['figure.dpi'] = 300
 
 from helpers import pack_string_to_f64_array
 
@@ -69,7 +74,9 @@ def test_functions(program, answer):
 @pytest.mark.parametrize("program, answer", [
     # For print statements, use "pytest -s" to see the output is correct.
     ("print_string", 7.986283854862652e-148), # The last thing that will be left on the stack is a newline character
-    ("print_array", 3), # 1 will still be left on the stack
+    ("print_array", 7), # 7 is last thing left on stack
+    ("print_array_assign", 9), # 9 is last thing left on stack
+    ("loop_print_string", 1), # 1 is last thing left on stack
 ])
 def test_stdout(program, answer):
     print(f"Running {program}")
@@ -175,34 +182,43 @@ def test_integration(program, answer):
 #    driver = Driver()
 #    stack, bc = driver.compile_and_run(f'test_files/integration/mandelbrot_mp.bc', 2, 128, 128)
 
-def debug_mandelbrot():
+def debug_mandelbrot(iters: int = 1):
+    """Creates a mandelbrot set image using the mandelbrot_mp.bc program. The image is saved as mandelbrot.png. Also prints the average runtime of the program.
+    
+    Args:
+        iters: The number of times to run the program to get a better average runtime. Default is 1.
+    
+    """
     driver = Driver()
 
     program_string = f"test_files/integration/mandelbrot_mp.bc"
-    nt, nb = 756, 756
-    stack, bc = driver.compile_and_run(program_string, precision=2, threads=nt, blocks=nb)
+    nt, nb = 512, 512
+
+    # Run program multiple times to get a better average runtime
+    t = []
+    for i in range(iters):
+        stack, bc = driver.compile_and_run(program_string, precision=2, threads=nt, blocks=nb)
+        t.append(driver.rt_statistics[0])
+
+    times = np.array(t)
+    print(f"Runtime: {np.mean(times)} +/- {2*np.std(times)}")
+
+    sq = int(math.sqrt(nt*nb))
+
+    # Offset to set where in the userspace to read the data from.
+    off = 0 
+
+    iter = driver.user_space[nt*nb*off:nt*nb*(off+1)].reshape((sq, sq))
     
+    fig, ax = plt.subplots(constrained_layout=True)
 
-    import matplotlib.pyplot as plt
-    import matplotlib.colors as colors
-    print(driver.user_space[0:nt*nb])
-    print(driver.user_space[nt*nb:2*nt*nb])
+    plt.imshow(iter, extent=(-1.0, 1.0, -2.0, 1.0), interpolation="bicubic")
+    ax.set_xticks(np.linspace(-1, 1, 5))
+    fig.colorbar(plt.cm.ScalarMappable(cmap=get_cmap('viridis'), norm=colors.Normalize(vmin=0, vmax=1500)), ax=ax)
+    fig.colorbar(plt.cm.ScalarMappable(cmap=get_cmap('viridis'), norm=colors.Normalize(vmin=0, vmax=1500)), ax=ax)
 
-    iter = driver.user_space[0:nt*nb].reshape((nt, nb))
-
-
-    fig = plt.figure()
-    ax = fig.add_axes([0.0, 0.0, 1.0, 1.0], frameon=False, aspect=1)
-
-    # Shaded rendering
-    light = colors.LightSource(azdeg=315, altdeg=10)
-    M = light.shade(iter, cmap=plt.cm.hot, vert_exag=1.5,
-                    norm=colors.PowerNorm(0.3), blend_mode='hsv')
-    plt.imshow(iter, extent=[-1.0, 1.0, -2.0, 1.0], interpolation="bicubic")
-    ax.set_xticks([])
-    ax.set_yticks([])
+    plt.savefig("mandelbrot.png", bbox_inches='tight') # Save the image
     plt.show()
-
 
 # For running individual tests without pytest and with more control
 def debug():
@@ -213,4 +229,4 @@ def debug():
     assert numpy.any(abs(stack - 22) <= abs(22) / 1000000)
 
 if __name__ == "__main__":
-    debug()
+    debug_mandelbrot()

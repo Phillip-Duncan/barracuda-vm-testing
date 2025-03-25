@@ -3,8 +3,8 @@ fn floor(x) {
 }
 
 fn sqrt(n) { // homebrew sqrt function
-    let x = 2 ^ 32;
-    let y = 0;
+    let mut x = 2 ^ 32;
+    let mut y = 0;
     while true {
         y = floor((x + floor(n/x))/2);
         if y >= x {
@@ -16,7 +16,7 @@ fn sqrt(n) { // homebrew sqrt function
 
 fn is_prime(n) {
     let sqrt_n = sqrt(n);
-    for (let j = 2; j <= sqrt_n; j = j + 1) {
+    for (let mut j = 2; j <= sqrt_n; j = j + 1) {
         if n % j == 0 {
             return false;
         }
@@ -24,8 +24,8 @@ fn is_prime(n) {
     return true;
 }
 
-let count = 0;
-for (let n = 2; n < 100; n = n + 1) {
+let mut count = 0;
+for (let mut n = 2; n < 100; n = n + 1) {
     if is_prime(n) {
         count = count + 1;
     }

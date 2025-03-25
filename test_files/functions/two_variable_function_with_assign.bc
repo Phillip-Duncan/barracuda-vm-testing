@@ -1,4 +1,4 @@
-fn testfunc(a, b) {
+fn testfunc(mut a, mut b) {
     b = b + 1;
     a = a + 1;
     return a + b;

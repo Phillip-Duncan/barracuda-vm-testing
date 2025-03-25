@@ -1,5 +1,5 @@
 let a = 3;
 let b = &a;
-let c = &b;
+let mut c = &b;
 **c = 4;
 let d = a + 5;
