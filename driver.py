@@ -63,6 +63,6 @@ class Driver:
             solve_func.argtypes = [int_ptr, longlong_ptr, double_ptr, ctypes.c_int32, ctypes.c_int32,
                                 double_ptr, longlong_ptr, ctypes.c_int32, ctypes.c_int32, double_ptr, double_ptr]
             solve_func(instr_stack, op_stack, value_stack, sizes[0], sizes[3], self.user_space, sizes[4], blocks, threads,
-                    result, self.rt_statistics)            
+                    result, self.rt_statistics)
 
         return result, bc

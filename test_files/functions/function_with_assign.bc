@@ -2,4 +2,5 @@ fn testfunc(mut a) {
     a = a + 1;
     return 3 + a;
 } 
-let test = testfunc(8) + 2;
+let mut b = 8;
+let test = testfunc(b) + 2;

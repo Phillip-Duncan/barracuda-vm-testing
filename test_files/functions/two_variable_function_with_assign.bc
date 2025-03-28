@@ -2,5 +2,7 @@ fn testfunc(mut a, mut b) {
     b = b + 1;
     a = a + 1;
     return a + b;
-} 
-let test = testfunc(1, 2) + 5;
+}
+let mut d = 1;
+let mut e = 2;
+let test = testfunc(d, e) + 5;

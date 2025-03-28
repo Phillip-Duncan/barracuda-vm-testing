@@ -1,5 +1,5 @@
 
-fn pentagon(n) {
+fn pentagon(mut n) {
     return n  * (3*n - 1) / 2;
 }
 

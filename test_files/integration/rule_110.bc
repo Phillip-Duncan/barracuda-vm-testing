@@ -2,7 +2,7 @@
 Simulates Rule 110. See https://en.wikipedia.org/wiki/Rule_110
 */
 
-fn apply_rule_110(mut tape, i) -> bool {
+fn apply_rule_110(mut tape, mut i) -> bool {
     if tape[i] + tape[i + 1] == 1 {
         return true;
     } else if (tape[i - 1] == 0) * (tape[i] == 1) * (tape[i + 1] == 1) == 1 {

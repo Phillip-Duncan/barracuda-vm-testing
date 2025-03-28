@@ -1,5 +1,5 @@
-fn printRow(row, r_size) {
-    let i = 0;
+fn printRow(mut row, r_size) {
+    let mut i = 0;
     let dead_char = " ";
     let alive_char = "*";
     let nlc = "\n";
@@ -15,23 +15,22 @@ fn printRow(row, r_size) {
     print(nlc);
 }
 
-let size = 100;
-let current: [f64; 100];
-let next: [f64; 100];
-
+let mut size = 100;
+let mut current: [f64; 100];
+let mut next: [f64; 100];
 
 current[size/2] = 1;
 
-let generation = 0;
+let mut generation = 0;
 let GENERATIONS = 50;
-
 
 printRow(current,size);
 
-let i = 0;
-let left = 0;
-let right = 0;
-let center = 0;
+let mut i = 0;
+let mut left = 0;
+let mut right = 0;
+let mut center = 0;
+
 
 while generation < GENERATIONS { 
     i = 0;
@@ -39,7 +38,6 @@ while generation < GENERATIONS {
         left = (i == 0) ? 0 : current[i-1];
         center = current[i];
         right = (i == size - 1) ? 0 : current[i+1];
-
 
         if ( ((left==1)*(center==1)*(right==1)) + ((left==1)*(center==0)*(right==0)) + ((left==0)*(center==0)*(right==0)) ) {
             next[i] = 0;
@@ -49,16 +47,11 @@ while generation < GENERATIONS {
         }
         i = i + 1;
     }
-
     i = 0;
     while i < size {
         current[i] = next[i];
         i = i + 1;
     }
-
     printRow(current, size);
-
     generation = generation + 1;
-
-
 }
