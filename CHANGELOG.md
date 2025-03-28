@@ -1,3 +1,9 @@
+## 0.1.1 (2025-03-29)
+
+### Fix
+
+- **tests**: fix function tests to correct proper qualifiers
+
 ## 0.1.0 (2025-03-26)
 
 ### Feat
